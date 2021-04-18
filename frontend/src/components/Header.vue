@@ -36,6 +36,10 @@
                 </div>
             </b-navbar-item>
             <b-navbar-dropdown v-else :label="username">
+                <b-navbar-item tag="router-link" :to="{ name: 'BlogCreate' }">
+                    Post
+                </b-navbar-item>
+                <hr class="dropdown-divider"/>
                 <b-navbar-item>
                     Profile
                 </b-navbar-item>

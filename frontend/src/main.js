@@ -15,6 +15,9 @@ import "./plugins/axios"
 // buefy
 import "./plugins/buefy"
 
+// mavon-editor
+import "./plugins/mavon-editor"
+
 Vue.config.productionTip = false
 
 new Vue({

@@ -7,3 +7,7 @@
 .box-card {
     width: 480px;
 }
+
+.align-left {
+    text-align: left;
+}

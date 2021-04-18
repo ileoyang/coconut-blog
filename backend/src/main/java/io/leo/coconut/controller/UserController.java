@@ -23,19 +23,13 @@ public class UserController {
     @PostMapping("register")
     public Result register(@Valid @RequestBody RegisterDto registerDto) {
         User user = userService.register(registerDto);
-        if (user == null) {
-            return Result.fail("failed to register");
-        }
-        return Result.success(user);
+        return user == null ? Result.fail("failed to register") : Result.success(user);
     }
 
     @PostMapping("login")
     public Result login(@Valid @RequestBody LoginDto loginDto) {
         String jwt = userService.login(loginDto);
-        if (jwt == null) {
-            return Result.fail("failed to login");
-        }
-        return Result.success(jwt);
+        return jwt == null ? Result.fail("failed to login") : Result.success(jwt);
     }
 
 }

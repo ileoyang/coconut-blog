@@ -10,7 +10,6 @@ import io.leo.coconut.model.entity.User;
 import io.leo.coconut.service.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
-import org.springframework.util.ObjectUtils;
 
 /**
  * @author Leo
@@ -36,7 +35,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public String login(LoginDto loginDto) {
         User user = baseMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getUsername, loginDto.getUsername()));
-        if (ObjectUtils.isEmpty(user) || !user.getPassword().equals(DigestUtils.md5DigestAsHex(loginDto.getPassword().getBytes()))) {
+        if (user == null || !user.getPassword().equals(DigestUtils.md5DigestAsHex(loginDto.getPassword().getBytes()))) {
             return null;
         }
         return JwtUtil.getToken(user.getId());
