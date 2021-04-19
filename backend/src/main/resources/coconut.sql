@@ -29,3 +29,8 @@ CREATE TABLE IF NOT EXISTS `blog_tag` (
     `blog_id` int NOT NULL,
     `tag_id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+CREATE TABLE IF NOT EXISTS `follow` (
+    `leader_id` int NOT NULL,
+    `follower_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;

@@ -40,6 +40,44 @@
                 </nav>
             </el-card>
         </div>
+        <div class="column">
+            <el-card>
+                <div slot="header">
+                    <span class="has-text-weight-bold">
+                        About author
+                    </span>
+                </div>
+                <p class="is-size-5 mb-5">
+                    <router-link :to="{ path: '/' }">
+                        {{ blog.username }}
+                    </router-link>
+                </p>
+                <div class="columns">
+                    <div class="column is-half">
+                        <code>
+                            {{ author.blogCount }}
+                        </code>
+                        <p>
+                            Blog(s)
+                        </p>
+                    </div>
+                    <div class="column is-half">
+                        <code>
+                            {{ author.followerCount }}
+                        </code>
+                        <p>
+                            Follower(s)
+                        </p>
+                    </div>
+                </div>
+                <b-button v-if="isFollow" type="is-success" @click="xorFollow">
+                    Following
+                </b-button>
+                <b-button v-else type="is-link" @click="xorFollow">
+                    Follow
+                </b-button>
+            </el-card>
+        </div>
     </div>
 </template>
 
@@ -50,7 +88,9 @@ import "github-markdown-css/github-markdown.css"
 export default {
     data() {
         return {
-            blog: {}
+            blog: {},
+            author: {},
+            isFollow: false
         }
     },
     computed: {
@@ -64,12 +104,26 @@ export default {
             const MarkdownIt = require("markdown-it");
             const md = new MarkdownIt();
             this.blog.content = md.render(this.blog.content)
+            this.$http.get("user/" + this.blog.userId).then(res => {
+                this.author = res.data
+            })
+            if (this.username != null) {
+                this.$http.get("follow/is/" + this.blog.userId).then(res => {
+                    this.isFollow = res.data
+                })
+            }
         })
     },
     methods: {
         deleteBlog() {
             this.$http.delete("blog/delete/" + this.blog.blogId).then(() => {
                 this.$router.push("/")
+            })
+        },
+        xorFollow() {
+            this.$http.get("follow/" + this.blog.userId).then(() => {
+                this.isFollow ^= 1
+                this.$router.go()
             })
         }
     }

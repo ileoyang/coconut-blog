@@ -32,4 +32,9 @@ public class UserController {
         return jwt == null ? Result.fail("failed to login") : Result.success(jwt);
     }
 
+    @GetMapping("{id}")
+    public Result getUserVo(@PathVariable("id") Integer userId) {
+        return Result.success(userService.getUserVo(userId));
+    }
+
 }

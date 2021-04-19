@@ -86,6 +86,11 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
         return blogVoIPage;
     }
 
+    @Override
+    public Integer countBlog(Integer userId) {
+        return count(new LambdaQueryWrapper<Blog>().eq(Blog::getUserId, userId));
+    }
+
     private BlogVo getBlogVo(Blog blog) {
         return new BlogVo(blog.getId(), blog.getTitle(), blog.getContent(), blog.getUserId(), userService.getById(blog.getUserId()).getUsername(),
                 blog.getView(), tagService.getTagNamesByBlogId(blog.getId()), blog.getCreateTime());

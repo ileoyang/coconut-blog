@@ -42,4 +42,11 @@ public interface BlogService extends IService<Blog>  {
      */
     IPage<BlogVo> list(int pageNum, int pageSize);
 
+    /**
+     * Count the number of blogs of a user.
+     * @param userId
+     * @return the number of blogs
+     */
+    Integer countBlog(Integer userId);
+
 }

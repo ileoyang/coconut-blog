@@ -7,7 +7,11 @@ import io.leo.coconut.mapper.UserMapper;
 import io.leo.coconut.model.dto.LoginDto;
 import io.leo.coconut.model.dto.RegisterDto;
 import io.leo.coconut.model.entity.User;
+import io.leo.coconut.model.vo.UserVo;
+import io.leo.coconut.service.BlogService;
+import io.leo.coconut.service.FollowService;
 import io.leo.coconut.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
@@ -16,6 +20,12 @@ import org.springframework.util.DigestUtils;
  */
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
+
+    @Autowired
+    BlogService blogService;
+
+    @Autowired
+    FollowService followService;
 
     @Override
     public User register(RegisterDto registerDto) {
@@ -39,6 +49,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             return null;
         }
         return JwtUtil.getToken(user.getId());
+    }
+
+    @Override
+    public UserVo getUserVo(Integer userId) {
+        return new UserVo(blogService.countBlog(userId), followService.countFollower(userId));
     }
 
 }
