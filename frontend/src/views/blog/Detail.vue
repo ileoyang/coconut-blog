@@ -39,6 +39,7 @@
                     </div>
                 </nav>
             </el-card>
+            <Comment :blogId="blog.blogId"/>
         </div>
         <div class="column">
             <el-card>
@@ -84,6 +85,7 @@
 <script>
 import { mapGetters } from "vuex"
 import "github-markdown-css/github-markdown.css"
+import Comment from "./Comment"
 
 export default {
     data() {
@@ -97,6 +99,9 @@ export default {
         ...mapGetters([
             "username"
         ])
+    },
+    components: {
+        Comment
     },
     created() {
         this.$http.get("blog/" + this.$route.params.id).then(res => {

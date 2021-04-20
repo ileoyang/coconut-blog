@@ -34,3 +34,13 @@ CREATE TABLE IF NOT EXISTS `follow` (
     `leader_id` int NOT NULL,
     `follower_id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+CREATE TABLE IF NOT EXISTS `comment` (
+    `id` int NOT NULL AUTO_INCREMENT,
+    `content` varchar(50) NOT NULL,
+    `blog_id` int NOT NULL,
+    `user_id` int NOT NULL,
+    `create_time` datetime NOT NULL,
+    `update_time` datetime NOT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
