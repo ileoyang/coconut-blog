@@ -1,6 +1,6 @@
 package io.leo.coconut.controller;
 
-import io.leo.coconut.common.JwtUtil;
+import io.leo.coconut.util.JwtUtil;
 import io.leo.coconut.common.Result;
 import io.leo.coconut.service.FollowService;
 import org.springframework.beans.factory.annotation.Autowired;

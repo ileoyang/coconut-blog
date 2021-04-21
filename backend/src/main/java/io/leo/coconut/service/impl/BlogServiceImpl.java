@@ -13,6 +13,7 @@ import io.leo.coconut.service.BlogService;
 import io.leo.coconut.service.BlogTagService;
 import io.leo.coconut.service.TagService;
 import io.leo.coconut.service.UserService;
+import io.leo.coconut.util.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +33,9 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
 
     @Autowired
     BlogTagService blogTagService;
+
+    @Autowired
+    RedisUtil redisUtil;
 
     @Override
     public Blog edit(BlogDto blogDto, Integer userId) {
@@ -69,8 +73,8 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
     @Override
     public BlogVo view(Integer blogId) {
         Blog blog = baseMapper.selectById(blogId);
-        blog.setView(blog.getView() + 1);
-        baseMapper.updateById(blog);
+        Integer incr = redisUtil.incrView(String.valueOf(blogId));
+        blog.setView(blog.getView() + incr);
         return getBlogVo(blog);
     }
 

@@ -2,7 +2,7 @@ package io.leo.coconut.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import io.leo.coconut.common.JwtUtil;
+import io.leo.coconut.util.JwtUtil;
 import io.leo.coconut.mapper.UserMapper;
 import io.leo.coconut.model.dto.LoginDto;
 import io.leo.coconut.model.dto.RegisterDto;

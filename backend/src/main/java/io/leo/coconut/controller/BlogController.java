@@ -1,6 +1,6 @@
 package io.leo.coconut.controller;
 
-import io.leo.coconut.common.JwtUtil;
+import io.leo.coconut.util.JwtUtil;
 import io.leo.coconut.common.Result;
 import io.leo.coconut.model.dto.BlogDto;
 import io.leo.coconut.model.entity.Blog;

@@ -1,4 +1,4 @@
-package io.leo.coconut.common;
+package io.leo.coconut.util;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
