@@ -49,4 +49,13 @@ public interface BlogService extends IService<Blog>  {
      */
     Integer countBlog(Integer userId);
 
+    /**
+     * Get a list of blogs with word in the content.
+     * @param word
+     * @param pageNum the number of page
+     * @param pageSize the size of each page
+     * @return blog view objects with pagination information
+     */
+    IPage<BlogVo> list(String word, int pageNum, int pageSize);
+
 }

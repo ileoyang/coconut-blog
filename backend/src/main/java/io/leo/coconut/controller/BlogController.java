@@ -38,8 +38,9 @@ public class BlogController {
 
     @GetMapping("list")
     public Result list(@RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
-                       @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize) {
-        return Result.success(blogService.list(pageNum, pageSize));
+                       @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
+                       @RequestParam(value = "word", required = false) String word) {
+        return word == null ? Result.success(blogService.list(pageNum, pageSize)) : Result.success(blogService.list(word, pageNum, pageSize));
     }
 
 }

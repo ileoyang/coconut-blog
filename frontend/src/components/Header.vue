@@ -21,6 +21,10 @@
                     Contact
                 </b-navbar-item>
             </b-navbar-dropdown>
+            <b-navbar-item>
+                <b-input v-model="word" placeholder="Enter blog content" type="search"/>
+                <b-button type="is-primary" label="Search" tag="router-link" :to="{ path: `/blog/search/${word}` }"/>
+            </b-navbar-item>
         </template>
         <template slot="end">
             <b-navbar-item tag="div" v-if="username == null">
@@ -56,6 +60,11 @@
 import { mapGetters } from "vuex"
 
 export default {
+    data() {
+        return {
+            word: ""
+        }
+    },
     computed: {
         ...mapGetters([
             "username"

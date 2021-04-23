@@ -49,6 +49,12 @@
 
 <script>
 export default {
+    props: {
+        word: {
+            type: String,
+            required: false
+        }
+    },
     data() {
         return {
             blogs: [],
@@ -67,7 +73,8 @@ export default {
             this.$http.get("blog/list", {
                 params: {
                     pageNum: this.page.current,
-                    pageSize: this.page.size
+                    pageSize: this.page.size,
+                    word: this.word
                 }
             }).then(res => {
                 const data = res.data

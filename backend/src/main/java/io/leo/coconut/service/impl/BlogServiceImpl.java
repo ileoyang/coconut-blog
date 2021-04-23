@@ -8,7 +8,9 @@ import io.leo.coconut.mapper.BlogMapper;
 import io.leo.coconut.model.dto.BlogDto;
 import io.leo.coconut.model.entity.Blog;
 import io.leo.coconut.model.entity.BlogTag;
+import io.leo.coconut.model.es.BlogModel;
 import io.leo.coconut.model.vo.BlogVo;
+import io.leo.coconut.repository.BlogModelRepository;
 import io.leo.coconut.service.BlogService;
 import io.leo.coconut.service.BlogTagService;
 import io.leo.coconut.service.TagService;
@@ -18,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Leo
@@ -37,21 +40,29 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
     @Autowired
     RedisUtil redisUtil;
 
+    @Autowired
+    BlogModelRepository blogModelRepository;
+
     @Override
     public Blog edit(BlogDto blogDto, Integer userId) {
         Blog blog = new Blog();
+        BlogModel blogModel = new BlogModel();
         if (blogDto.getBlogId() != null) {
             blog = baseMapper.selectById(blogDto.getBlogId());
             if (!userId.equals(blog.getUserId())) {
                 return null;
             }
             blogTagService.remove(new LambdaQueryWrapper<BlogTag>().eq(BlogTag::getBlogId, blogDto.getBlogId()));
+            blogModel = blogModelRepository.findByBlogId(blog.getId());
         } else {
             blog.setUserId(userId);
         }
         blog.setTitle(blogDto.getTitle());
         blog.setContent(blogDto.getContent());
         saveOrUpdate(blog);
+        blogModel.setBlogId(blog.getId());
+        blogModel.setContent(blog.getContent());
+        blogModelRepository.save(blogModel);
         for (String tagName : blogDto.getTagNames()) {
             Integer tagId = tagService.add(tagName);
             blogTagService.save(new BlogTag(blog.getId(), tagId));
@@ -67,6 +78,8 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
         }
         baseMapper.deleteById(blogId);
         blogTagService.remove(new LambdaQueryWrapper<BlogTag>().eq(BlogTag::getBlogId, blogId));
+        BlogModel blogModel = blogModelRepository.findByBlogId(blogId);
+        blogModelRepository.delete(blogModel);
         return true;
     }
 
@@ -95,9 +108,26 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
         return count(new LambdaQueryWrapper<Blog>().eq(Blog::getUserId, userId));
     }
 
+    @Override
+    public IPage<BlogVo> list(String word, int pageNum, int pageSize) {
+        List<BlogModel> blogModels = blogModelRepository.findByContentIsContaining(word);
+        IPage<BlogVo> blogVoIPage = new Page<>(pageNum, pageSize, blogModels.size());
+        ArrayList<BlogVo> records = new ArrayList<>();
+        for (BlogModel blogModel : blogModels) {
+            records.add(getBlogVo(blogModel));
+        }
+        blogVoIPage.setRecords(records);
+        return blogVoIPage;
+    }
+
     private BlogVo getBlogVo(Blog blog) {
         return new BlogVo(blog.getId(), blog.getTitle(), blog.getContent(), blog.getUserId(), userService.getById(blog.getUserId()).getUsername(),
                 blog.getView(), tagService.getTagNamesByBlogId(blog.getId()), blog.getCreateTime());
+    }
+
+    private BlogVo getBlogVo(BlogModel blogModel) {
+        Blog blog = getById(blogModel.getBlogId());
+        return getBlogVo(blog);
     }
 
 }
