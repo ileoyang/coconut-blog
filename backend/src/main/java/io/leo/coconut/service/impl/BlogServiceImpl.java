@@ -86,8 +86,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
     @Override
     public BlogVo view(Integer blogId) {
         Blog blog = baseMapper.selectById(blogId);
-        Integer incr = redisUtil.incrView(String.valueOf(blogId));
-        blog.setView(blog.getView() + incr);
+        redisUtil.incrView(String.valueOf(blogId));
         return getBlogVo(blog);
     }
 
@@ -122,7 +121,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
 
     private BlogVo getBlogVo(Blog blog) {
         return new BlogVo(blog.getId(), blog.getTitle(), blog.getContent(), blog.getUserId(), userService.getById(blog.getUserId()).getUsername(),
-                blog.getView(), tagService.getTagNamesByBlogId(blog.getId()), blog.getCreateTime());
+                blog.getView() + redisUtil.getView(String.valueOf(blog.getId())), tagService.getTagNamesByBlogId(blog.getId()), blog.getCreateTime());
     }
 
     private BlogVo getBlogVo(BlogModel blogModel) {
