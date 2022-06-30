@@ -1,13 +1,12 @@
 <template>
-    <div>
-        <BlogList :word="$route.params.word"/>
-    </div>
+  <div>
+    <BlogList :word="$route.params.word" />
+  </div>
 </template>
 
 <script>
-import BlogList from "./List"
-
+import BlogList from './List';
 export default {
-    components: { BlogList }
-}
+  components: { BlogList },
+};
 </script>
